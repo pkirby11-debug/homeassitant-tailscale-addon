@@ -1,0 +1,3 @@
+name: "Custom Tailscale Repository"
+url: "https://github.com/pkirby11-debug/homeassitant-tailscale-addon"
+maintainer: "Kevin Phillips <kevin@example.com>"

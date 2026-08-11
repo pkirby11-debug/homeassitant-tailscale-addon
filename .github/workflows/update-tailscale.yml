@@ -1,0 +1,45 @@
+name: Auto Update Tailscale Version
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Get Latest Tailscale Release
+        id: latest_ts
+        run: |
+          LATEST_TAG=$(curl -s https://api.github.com/repos/tailscale/tailscale/releases/latest | jq -r .tag_name | sed 's/^v//')
+          echo "latest_version=$LATEST_TAG" >> $GITHUB_OUTPUT
+          echo "Latest Tailscale version is $LATEST_TAG"
+
+      - name: Get Current Configured Version
+        id: current_ts
+        run: |
+          CURRENT_VER=$(grep -E '^version:' tailscale/config.yaml | awk '{print $2}' | tr -d '"')
+          echo "current_version=$CURRENT_VER" >> $GITHUB_OUTPUT
+          echo "Current add-on version is $CURRENT_VER"
+
+      - name: Update Files if New Version Available
+        if: steps.latest_ts.outputs.latest_version != steps.current_ts.outputs.current_version && steps.latest_ts.outputs.latest_version != ''
+        run: |
+          NEW_VER="${{ steps.latest_ts.outputs.latest_version }}"
+          echo "Updating add-on to version $NEW_VER..."
+          
+          sed -i "s/^version: .*/version: \"$NEW_VER\"/" tailscale/config.yaml
+          sed -i "s/ARG TAILSCALE_VERSION=.*/ARG TAILSCALE_VERSION=\"$NEW_VER\"/" tailscale/Dockerfile
+
+      - name: Commit and Push Changes
+        if: steps.latest_ts.outputs.latest_version != steps.current_ts.outputs.current_version && steps.latest_ts.outputs.latest_version != ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add tailscale/config.yaml tailscale/Dockerfile
+          git commit -m "bump: update Tailscale to v${{ steps.latest_ts.outputs.latest_version }}"
+          git push
