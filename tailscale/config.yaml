@@ -1,6 +1,6 @@
 name: "Tailscale (Auto-Updating)"
 description: "Zero-config VPN for Home Assistant with automated daily upstream updates"
-version: "1.92.3"
+version: "1.92.3.1"
 slug: "tailscale_auto"
 init: false
 arch:
