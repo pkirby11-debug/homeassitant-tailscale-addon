@@ -1,0 +1,54 @@
+---
+configuration:
+  accept_dns:
+    name: Accept DNS
+    description: >-
+      Allows accepting DNS settings configured on your Tailscale admin console.
+  accept_routes:
+    name: Accept routes
+    description: >-
+      Allows accepting subnet routes advertised by other nodes in your tailnet.
+  advertise_exit_node:
+    name: Advertise as an exit node
+    description: >-
+      Allows advertising this Tailscale instance as an exit node for internet traffic.
+  advertise_connector:
+    name: Advertise as an app connector
+    description: >-
+      Allows routing traffic for specified applications over your tailnet.
+  advertise_routes:
+    name: Advertise subnet routes
+    description: >-
+      Specify subnets or CIDR ranges to advertise to other devices on your tailnet.
+  always_use_derp:
+    name: Always use DERP connection
+    description: >-
+      Forces all communication over DERP relay servers by disabling direct UDP.
+  exit_node:
+    name: Use exit node
+    description: >-
+      Specify another Tailscale node IP or ID to use as an exit node for this device.
+  login_server:
+    name: Login server
+    description: >-
+      Specify a custom control server (e.g. Headscale). Defaults to official Tailscale control plane.
+  snat_subnet_routes:
+    name: Source NAT subnet routes
+    description: >-
+      Enables Source NAT for subnet routes to simplify routing configuration.
+  stateful_filtering:
+    name: Stateful packet filtering
+    description: >-
+      Enables stateful packet filtering on packet-forwarding nodes.
+  tags:
+    name: Tags
+    description: >-
+      Specify ACL tags for this instance (e.g., tag:home-assistant).
+  userspace_networking:
+    name: Userspace networking mode
+    description: >-
+      Enables userspace networking mode instead of creating a tailscale0 TUN interface.
+  extra_args:
+    name: Extra command line arguments
+    description: >-
+      Additional custom flags to pass to the `tailscale up` command.
