@@ -103,5 +103,8 @@ fi
 echo "Running tailscale up with flags: $UP_FLAGS"
 tailscale --socket=/var/run/tailscale/tailscaled.sock up $UP_FLAGS || true
 
+echo "Starting Tailscale Web UI for Home Assistant Ingress on port 8088..."
+tailscale --socket=/var/run/tailscale/tailscaled.sock web --listen 0.0.0.0:8088 &
+
 echo "Tailscale is ready. Tailing logs below:"
 exec tail -f /var/log/tailscaled.log
